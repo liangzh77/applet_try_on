@@ -8,6 +8,22 @@ export default defineConfig(({ mode }) => {
       server: {
         port: 3000,
         host: '0.0.0.0',
+        proxy: {
+          // Volcengine API代理 - 解决CORS问题
+          '/api/volcengine': {
+            target: 'https://ark.cn-beijing.volces.com/api/v3',
+            changeOrigin: true,
+            rewrite: (path) => path.replace(/^\/api\/volcengine/, ''),
+            configure: (proxy, _options) => {
+              proxy.on('proxyReq', (proxyReq, req, _res) => {
+                // 添加Authorization header
+                if (env.VITE_ARK_API_KEY) {
+                  proxyReq.setHeader('Authorization', `Bearer ${env.VITE_ARK_API_KEY}`);
+                }
+              });
+            }
+          }
+        }
       },
       plugins: [react()],
       define: {
