@@ -1,61 +1,105 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# AI霓裳智能换装 - 全平台项目
 
-# AI 霓裳 - 智能虚拟试穿应用
-
-基于AI图像生成技术的虚拟试穿应用,支持多种AI服务提供商。
-
-## 支持的AI服务
-
-- **Volcengine (火山引擎)** - Seedream 4.0 多图融合 (默认)
-- **Google Gemini** - Gemini 2.5 Flash Image
-
-## 本地运行
-
-**前置要求:** Node.js 16+
-
-1. 安装依赖:
-   ```bash
-   npm install
-   ```
-
-2. 配置环境变量:
-   - 复制 `.env.example` 为 `.env.local`
-   - 根据你选择的AI服务提供商,配置对应的API Key:
-
-   ### 使用 Volcengine (推荐)
-   ```bash
-   IMAGE_PROVIDER=volcengine
-   ARK_API_KEY=your_ark_api_key_here
-   ```
-   获取API Key: https://console.volcengine.com/ark/region:ark+cn-beijing/apikey
-
-   ### 使用 Gemini
-   ```bash
-   IMAGE_PROVIDER=gemini
-   GEMINI_API_KEY=your_gemini_api_key_here
-   ```
-   获取API Key: https://ai.google.dev/
-
-3. 运行应用:
-   ```bash
-   npm run dev
-   ```
-
-## 切换AI服务提供商
-
-只需修改 `.env.local` 中的 `IMAGE_PROVIDER` 参数:
-- `IMAGE_PROVIDER=volcengine` - 使用火山引擎
-- `IMAGE_PROVIDER=gemini` - 使用Google Gemini
+这个仓库包含AI霓裳智能换装应用的Web版和微信小程序版。
 
 ## 项目结构
 
 ```
-services/
-  ├── imageGenerationService.ts    # 统一服务抽象层
-  ├── geminiService.ts              # 对外暴露的API接口
-  └── providers/
-      ├── volcengineProvider.ts     # Volcengine适配器
-      └── geminiProvider.ts         # Gemini适配器
+applet_try_on/
+├── web/              # Web应用 (React + Vite)
+├── miniapp/          # 微信小程序 (Taro + React)
+├── node_modules/     # 共享的node_modules (主要用于全局工具)
+└── README.md         # 本文件
 ```
+
+## 子项目说明
+
+### Web应用 (`web/`)
+
+基于React和Vite的Web应用,支持:
+- 虚拟试穿功能
+- 文生图服装生成
+- Volcengine和Gemini多AI提供商支持
+
+**开发运行:**
+```bash
+cd web
+npm install
+npm run dev
+```
+
+**部署:**
+可以部署到Vercel、Netlify等静态托管平台。
+
+详细文档请查看 `web/README.md`
+
+### 微信小程序 (`miniapp/`)
+
+基于Taro框架的微信小程序版本,功能与Web版基本一致。
+
+**开发运行:**
+```bash
+cd miniapp
+npm install
+npm run dev:weapp
+```
+
+然后使用微信开发者工具打开 `miniapp/dist` 目录。
+
+**构建:**
+```bash
+npm run build:weapp
+```
+
+## 共享代码
+
+两个项目共享以下代码结构:
+- `services/` - 业务逻辑层(图像生成服务)
+- 类型定义
+- 常量配置
+
+## 技术栈
+
+### Web版
+- React 19
+- Vite
+- Tailwind CSS (CDN)
+- Axios
+- Volcengine Seedream 4.0 / Gemini API
+
+### 小程序版
+- Taro 4.1.8
+- React 18
+- Sass
+- Volcengine Seedream 4.0 API
+
+## 环境变量配置
+
+两个项目都需要配置环境变量文件 `.env.local`:
+
+```env
+# 图像生成服务提供商: 'volcengine' | 'gemini'
+VITE_IMAGE_PROVIDER=volcengine
+
+# Gemini配置
+VITE_GEMINI_API_KEY=your_gemini_api_key
+
+# Volcengine配置
+VITE_ARK_API_KEY=your_volcengine_api_key
+```
+
+## 开发指南
+
+1. 首次克隆仓库后,分别进入 `web/` 和 `miniapp/` 目录安装依赖
+2. 配置各自的 `.env.local` 文件
+3. 分别运行各项目的开发命令
+
+## 注意事项
+
+- Web版和小程序版使用不同的React版本(Web用19,小程序用18),因此分开维护
+- 小程序需要在微信公众平台配置服务器域名白名单
+- Volcengine API调用可能需要较长时间,注意超时设置
+
+## License
+
+MIT
