@@ -1,0 +1,10 @@
+{
+  "name": "generateTryOn",
+  "version": "1.0.0",
+  "description": "虚拟试穿云函数 - 调用Volcengine Seedream 4.0 API",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3",
+    "axios": "^1.6.0"
+  }
+}
